@@ -19,16 +19,16 @@ double get_input();
 int main() {
     setlocale(LC_ALL, "ru");
     const double ounces = 28.3;
-    
+
     double gramms = get_input();
     if (gramms < 0) {
         cout << "Ошибка: вес не может быть отрицательным!" << endl;
         return 1;
     }
-    
+
     cout << "Ввод выполнен корректно!" << endl;
     cout << "Вес в унциях: " << gramms_to_ounces(gramms, ounces) << endl;
-    
+
     return 0;
 }
 
@@ -40,14 +40,14 @@ double get_input() {
     double gramms = 0;
     cout << "Введите вес в граммах: ";
     cin >> gramms;
-    
+
     // Проверка на корректность ввода
-    while (cin.fail()) {
+    if (cin.fail()) {
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Ошибка ввода. Пожалуйста, введите число: ";
-        cin >> gramms;
+        cout << "Ошибка ввода. Будет использовано значение по умолчанию (0)." << endl;
+        return 0;
     }
-    
+
     return gramms;
 }
