@@ -121,7 +121,7 @@ int productOfEvenElements(int* arr, const int n) {
 
 void replaceOddIndexesWithSquares(int* arr, const int n) {
     for (size_t i = 0; i < n; i++) {
-        if (i % 2 != 0) { // Нечетные индексы (по человечески, начиная с 1)
+        if (i % 2 != 0) { // Нечетные индексы 
             arr[i] = (i + 1) * (i + 1); // Квадрат номера (не индекса)
         }
     }
