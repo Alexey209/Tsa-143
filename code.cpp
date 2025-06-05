@@ -44,9 +44,9 @@ double get_input() {
     // Проверка на корректность ввода
     if (cin.fail()) {
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Ошибка ввода. Будет использовано значение по умолчанию (0)." << endl;
-        return 0;
+cin.ignore(numeric_limits<streamsize>::max(), '\n');
+cout << "Ошибка ввода. Программа будет завершена." << endl;
+abort();
     }
 
     return gramms;
