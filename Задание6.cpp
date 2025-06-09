@@ -1,18 +1,8 @@
-/**
- * @file array_operations.cpp
- * @brief Программа для работы с динамическим массивом целых чисел
- * 
- * Программа предоставляет следующие функции:
- * 1. Заполнение массива вручную или случайными числами
- * 2. Вычисление произведения четных элементов
- * 3. Замена элементов с нечетными индексами на квадраты их номеров
- * 4. Проверка наличия положительных элементов, которые при делении на k дают остаток 2
- */
-
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <limits>
+#include <vector>
 
 using namespace std;
 
@@ -42,21 +32,21 @@ void checkN(const int n);
  * @param arr Указатель на массив
  * @param n Размер массива
  */
-void fillArray(int* arr, const int n);
+void fillArray(int* arr, const size_t n);
 
 /**
  * @brief Заполняет массив случайными числами в диапазоне [-15, 15]
  * @param arr Указатель на массив
  * @param n Размер массива
  */
-void fillArrayRandom(int* arr, const int n);
+void fillArrayRandom(int* arr, const size_t n);
 
 /**
  * @brief Выводит элементы массива на экран
  * @param arr Указатель на массив
  * @param n Размер массива
  */
-void printArray(int* arr, const int n);
+void printArray(const int* arr, const size_t n);
 
 /**
  * @brief Вычисляет произведение четных элементов массива
@@ -64,15 +54,16 @@ void printArray(int* arr, const int n);
  * @param n Размер массива
  * @return Произведение четных элементов или 0, если таких нет
  */
-int productOfEvenElements(int* arr, const int n);
+int productOfEvenElements(const int* arr, const size_t n);
 
 /**
- * @brief Заменяет элементы с нечетными индексами на квадраты их номеров
- * @param arr Указатель на массив
+ * @brief Создает копию массива с заменой элементов с нечетными индексами на квадраты их номеров
+ * @param arr Указатель на исходный массив
  * @param n Размер массива
+ * @return Вектор с измененными значениями
  * @note Номера элементов = индексы + 1
  */
-void replaceOddIndexesWithSquares(int* arr, const int n);
+vector<int> getArrayWithReplacedOddIndexes(const int* arr, const size_t n);
 
 /**
  * @brief Проверяет наличие положительных элементов, дающих остаток 2 при делении на k
@@ -81,48 +72,52 @@ void replaceOddIndexesWithSquares(int* arr, const int n);
  * @param k Делитель
  * @return true если такие элементы есть, false если нет или k=0
  */
-bool hasPositiveElementsDivisibleByKWithRemainder2(int* arr, const int n, int k);
+bool hasPositiveElementsDivisibleByKWithRemainder2(const int* arr, const size_t n, const int k);
 
 int main() {
     srand(time(0)); // Инициализация генератора случайных чисел
 
     size_t n = getSize();
-    int* arr = new int[n];
+    int* originalArr = new int[n];
 
     cout << "Заполнить массив вручную (1) или случайными числами (2)? ";
     int choice = getValue();
-    if (choice == 1) {
-        fillArray(arr, n);
-    } else if (choice == 2) {
-        fillArrayRandom(arr, n);
-    } else {
+    switch (choice) {
+    case 1:
+        fillArray(originalArr, n);
+        break;
+    case 2:
+        fillArrayRandom(originalArr, n);
+        break;
+    default:
         cout << "Неверный выбор. Программа завершена." << endl;
-        delete[] arr;
+        delete[] originalArr;
         return 1;
-    }
+}
 
-    printArray(arr, n);
+    cout << "Исходный массив: ";
+    printArray(originalArr, n);
 
     // 1. Найти произведение элементов с четными значениями
-    int product = productOfEvenElements(arr, n);
+    int product = productOfEvenElements(originalArr, n);
     cout << "Произведение четных элементов: " << product << endl;
 
-    // 2. Заменить элементы с нечетными индексами на квадраты их индексов
-    replaceOddIndexesWithSquares(arr, n);
-    cout << "Массив после замены: ";
-    printArray(arr, n);
+    // 2. Создать копию с заменой элементов с нечетными индексами
+    vector<int> modifiedArr = getArrayWithReplacedOddIndexes(originalArr, n);
+    cout << "Модифицированный массив: ";
+    printArray(modifiedArr.data(), n);
 
     // 3. Проверить наличие положительных элементов, делящихся на k с остатком 2
     cout << "Введите число k: ";
     int k = getValue();
-    bool hasElements = hasPositiveElementsDivisibleByKWithRemainder2(arr, n, k);
+    bool hasElements = hasPositiveElementsDivisibleByKWithRemainder2(originalArr, n, k);
     if (hasElements) {
         cout << "В массиве есть такие элементы." << endl;
     } else {
         cout << "В массиве нет таких элементов." << endl;
     }
 
-    delete[] arr;
+    delete[] originalArr;
     return 0;
 }
 
@@ -152,27 +147,27 @@ void checkN(const int n) {
     }
 }
 
-void fillArray(int* arr, const int n) {
+void fillArray(int* arr, const size_t n) {
     for (size_t i = 0; i < n; i++) {
         cout << "Введите arr[" << i + 1 << "] = ";
         arr[i] = getValue();
     }
 }
 
-void fillArrayRandom(int* arr, const int n) {
+void fillArrayRandom(int* arr, const size_t n) {
     for (size_t i = 0; i < n; i++) {
         arr[i] = rand() % 31 - 15; // Диапазон [-15, 15]
     }
 }
 
-void printArray(int* arr, const int n) {
+void printArray(const int* arr, const size_t n) {
     for (size_t i = 0; i < n; i++) {
         cout << arr[i] << " ";
     }
     cout << endl;
 }
 
-int productOfEvenElements(int* arr, const int n) {
+int productOfEvenElements(const int* arr, const size_t n) {
     int product = 1;
     bool hasEven = false;
 
@@ -186,15 +181,19 @@ int productOfEvenElements(int* arr, const int n) {
     return hasEven ? product : 0;
 }
 
-void replaceOddIndexesWithSquares(int* arr, const int n) {
+vector<int> getArrayWithReplacedOddIndexes(const int* arr, const size_t n) {
+    vector<int> modifiedArr(arr, arr + n); // Создаем копию массива
+
     for (size_t i = 0; i < n; i++) {
-        if (i % 2 != 0) { // Нечетные индексы 
-            arr[i] = (i + 1) * (i + 1); // Квадрат номера (не индекса)
+        if (i % 2 != 0) { // Нечетные индексы
+            modifiedArr[i] = (i + 1) * (i + 1); // Квадрат номера (не индекса)
         }
     }
+
+    return modifiedArr;
 }
 
-bool hasPositiveElementsDivisibleByKWithRemainder2(int* arr, const int n, int k) {
+bool hasPositiveElementsDivisibleByKWithRemainder2(const int* arr, const size_t n, const int k) {
     if (k == 0) return false; // Деление на ноль невозможно
 
     for (size_t i = 0; i < n; i++) {
