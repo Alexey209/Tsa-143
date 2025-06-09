@@ -67,7 +67,7 @@ int main()
 
 int getValidN()
 {
-    int n;
+    int n=0;
     cout << "Введите n: ";
     cin >> n;
     
@@ -82,7 +82,7 @@ int getValidN()
 
 double getValidE()
 {
-    double e;
+    double e=0;
     cout << "Введите e: ";
     cin >> e;
     
@@ -114,7 +114,7 @@ double sumModuloE(const double e)
     while (abs(term) >= e)
     {
         sum += term;
-        term = sequenceTerm(++k);
+        term = sequenceTerm(k++);
     }
     
     return sum;
