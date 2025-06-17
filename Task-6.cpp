@@ -34,11 +34,13 @@ void checkN(const int n);
 void fillArray(int* arr, const size_t n);
 
 /**
- * @brief Заполняет массив случайными числами в диапазоне [-15, 15]
+ * @brief Заполняет массив случайными числами в заданном диапазоне
  * @param arr Указатель на массив
  * @param n Размер массива
+ * @param min Минимальное значение диапазона
+ * @param max Максимальное значение диапазона
  */
-void fillArrayRandom(int* arr, const size_t n);
+void fillArrayRandom(int* arr, const size_t n, const int min, const int max);
 
 /**
  * @brief Выводит элементы массива на экран
@@ -74,6 +76,18 @@ int* getArrayWithReplacedOddIndexes(const int* arr, const size_t n);
  */
 bool hasPositiveElementsDivisibleByKWithRemainder2(const int* arr, const size_t n, const int k);
 
+/**
+ * @brief Главная функция программы
+ * @return Код завершения программы (0 - успешно, 1 - ошибка)
+ * @note Программа выполняет следующие действия:
+ * 1. Получает размер массива от пользователя
+ * 2. Предлагает выбрать способ заполнения массива (вручную или случайными числами)
+ * 3. Выполняет три операции с массивом:
+ *    - Находит произведение четных элементов
+ *    - Создает модифицированную копию массива
+ *    - Проверяет наличие положительных элементов с остатком 2 при делении на k
+ * 4. Освобождает выделенную память
+ */
 int main() {
     srand(time(0)); // Инициализация генератора случайных чисел
 
@@ -86,9 +100,14 @@ int main() {
         case 1:
             fillArray(originalArr, n);
             break;
-        case 2:
-            fillArrayRandom(originalArr, n);
+        case 2: {
+            cout << "Введите минимальное значение диапазона: ";
+            int min = getValue();
+            cout << "Введите максимальное значение диапазона: ";
+            int max = getValue();
+            fillArrayRandom(originalArr, n, min, max);
             break;
+        }
         default:
             cout << "Неверный выбор. Программа завершена." << endl;
             delete[] originalArr;
@@ -155,9 +174,14 @@ void fillArray(int* arr, const size_t n) {
     }
 }
 
-void fillArrayRandom(int* arr, const size_t n) {
+void fillArrayRandom(int* arr, const size_t n, const int min, const int max) {
+    if (min > max) {
+        cout << "Ошибка: минимальное значение больше максимального. Программа будет завершена." << endl;
+        abort();
+    }
+    
     for (size_t i = 0; i < n; i++) {
-        arr[i] = rand() % 31 - 15; // Диапазон [-15, 15]
+        arr[i] = rand() % (max - min + 1) + min;
     }
 }
 
