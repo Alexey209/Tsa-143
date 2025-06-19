@@ -191,19 +191,10 @@ void printArray(const int* arr, const size_t n) {
     }
     cout << endl;
 }
-
-int productOfEvenElements(const int* arr, const size_t n) {
-    int product = 1;
-    bool hasEven = false;
-
-    for (size_t i = 0; i < n; i++) {
-        if (arr[i] % 2 == 0) {
-            product *= arr[i];
-            hasEven = true;
-        }
+        
     }
 
-    return hasEven ? product : 0;
+    return product;
 }
 
 int* getArrayWithReplacedOddIndexes(const int* arr, const size_t n) {
